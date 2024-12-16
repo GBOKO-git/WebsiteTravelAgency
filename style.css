@@ -1,0 +1,89 @@
+* {
+  margin: 0;
+  font-family: Cambria, Cochin, Georgia, Times, "Times New Roman", serif;
+}
+.bg-image {
+  display: flex;
+  justify-content: center;
+  background: rgba(102, 102, 102, 0.8) url(./images/airplane.jpg);
+  background-blend-mode: darken;
+  background-position: 100%;
+  background-size: 100%;
+  background-repeat: no-repeat;
+  height: 700px;
+  margin-top: 0;
+  width: 100%;
+}
+.btn {
+  width: 100px;
+}
+body {
+}
+.destination {
+  display: flex;
+}
+span {
+  margin-top: 1rem;
+}
+/* Style the buttons that are used to open and close the accordion panel */
+.accordion {
+  background-color: #eee;
+  color: #444;
+  cursor: pointer;
+  padding: 18px;
+  width: 75%;
+  text-align: left;
+  border: none;
+  outline: none;
+  transition: 0.4s;
+}
+
+/* Add a background color to the button if it is clicked on (add the .active class with JS), and when you move the mouse over it (hover) */
+.active,
+.accordion:hover {
+  background-color: #ccc;
+}
+
+/* Style the accordion panel. Note: hidden by default */
+.panel {
+  padding: 0 18px;
+  background-color: white;
+  display: none;
+  overflow: hidden;
+}
+form {
+  width: 75%;
+  margin: 50px 50px;
+  justify-content: center;
+}
+.container {
+  justify-content: center;
+  justify-items: center;
+}
+h6 {
+  width: 50%;
+  font-family: "Franklin Gothic Medium", "Arial Narrow", Arial, sans-serif;
+  text-align: justify;
+  font-size: large;
+}
+.navbar-nav {
+  gap: 1rem;
+  padding-right: 5rem;
+}
+.navbar {
+  gap: 1rem;
+  background-color: rgb(144, 235, 235);
+}
+.heros {
+  margin-top: 0;
+}
+ul li a {
+  font-size: medium;
+  font-family: "Times New Roman", Times, serif;
+}
+ul li a::after {
+  text-overflow: ellipsis;
+}
+ul li a:hover {
+  text-decoration: underline;
+}

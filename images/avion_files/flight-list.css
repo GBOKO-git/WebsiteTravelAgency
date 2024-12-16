@@ -1,0 +1,670 @@
+:root {
+  --font-family: 'Futura Std';
+  --font-size-icone: 50px;
+  --font-size-normal: 16px;
+  --font-size-large: 20px;
+  --cfd-field-height: 45px;
+  --cfd-field-top-space: 10px;
+  --cfd-field-border: solid 1px #666666;
+  --cfd-field-primary-radius: 5px;
+  --cfd-field-radius-round: 50%;
+  --cfd-fs-radius: 37px;
+  --cfd-fs-prog-bgc: #292929;
+  --cfd-fs-prog-size: 5px;
+  --cfd-field-outline: 0;
+  --select2-option--highlighted-bgc: #1ba455;
+  --select2-option--highlighted-color: #fff;
+  --select2-option-selected-bgc: #ed7f3a33;
+  --cfd-disabled-bgc: #e6e6e6;
+}
+
+*{    
+  font-family: var(--font-family);
+}
+
+.flightStatusForm .cfd-form-option, .flightStatusForm .cfd-form-option-two, 
+.flightStatusForm #fs-number, #flight_status_request_form .cfd-form-option, 
+.flight_status_request_form .cfd-form-option-two, .flight_status_request_form #fs-number{
+  display: none !important;
+}
+
+.cfd-form input, .cfd-form select{
+  outline: var(--cfd-field-outline);
+}
+
+
+.cfd-form .cfd-form-fields{
+  display: flex;
+  align-items: end;
+}
+
+.cfd-form .cfd-form-fields > div:not(.passenger), .cfd-form .cfd-form-fields .passenger > div{
+  margin: 0 8px;
+  box-sizing: border-box;
+}
+
+.cfd-form .cfd-form-fields > div:not(.passenger, .submitBtn){
+  width: 100%;
+}
+
+
+
+.cfd-form .cfd-form-fields > div:first-child, .cfd-form .cfd-form-fields .fs-number-field{
+  margin-left: 0;
+}
+
+.cfd-form .cfd-form-fields > div:last-child, .cfd-form .cfd-form-fields .submitBtn {
+  margin-right: 0;
+}
+
+.cfd-form .cfd-form-fields input[disabled], .select2-container--default .select2-results__option--disabled{
+  background: var(--cfd-disabled-bgc);
+}
+/* END */
+
+.flight_offers_request_form .cfd-form-fields .passenger{
+  display: flex;
+  align-items: end;
+}
+
+.flight_offers_request_form .cfd-form-fields .passenger select{
+  width: var(--cfd-field-height);
+  padding: 10px 5px;
+  border-radius: var(--cfd-field-radius-round);
+}
+
+.flight_offers_request_form .cfd-form-fields .passenger div{
+ display: flex;
+ flex-direction: column;
+ align-items: center;
+ white-space: nowrap;
+}
+
+.flight_offers_request_form .cfd-form-fields .submitBtn input{
+  padding: 8px 30px;
+  text-transform: uppercase;
+  background-color: rgba(27, 164, 85, 1);
+  color: #fff;
+  border: 0;
+  font-weight: bold;
+  transition: 0.2s;
+}
+
+.flight_offers_request_form .cfd-form-fields .submitBtn input:hover{
+  background-color: #ED7F3A;
+}
+
+
+/**********************************************/
+/**********************************************/
+/**********************************************/
+/**********************************************/
+/**********************************************/
+
+.fs-result-wrap {
+  min-height: 100px;
+  position: relative;
+}
+
+.fs-results, .fs-results-loading {
+  display: none;
+}
+
+.cfd-fscard-ctnr, .cfd-fsform-ctnr{
+  position: relative;
+  margin: auto;
+  background: #FFFFFF;
+  /*box-shadow: 0px 2px 26px -6px rgba(111, 111, 111, 0.25);*/
+  border-radius: 5px;
+}
+
+/* .cfd-fsform-ctnr form{
+padding: 30px;
+} */
+
+.cfd-fscard-ctnr.lg-screen{
+  display: block;
+}
+
+.cfd-fscard-ctnr.sm-screen{
+  display: none;
+}
+
+.cfd-fscard-ctnr{
+  box-shadow: 0px 2px 26px -6px rgba(111, 111, 111, 0.25);
+  margin-bottom: 30px;
+}
+
+
+/**********************************************/
+/**********************************************/
+.cfd-form-option input[type="radio"]{
+  display: none;
+  margin-right: 8px
+}
+
+/*  */
+.cfd-form-option {
+  display: flex;
+  gap: 30px;
+  margin-bottom: 10px;
+}
+
+.cfd-form-option label{
+  text-align: center;
+  position: relative;
+  padding-left: 25px;
+  cursor: pointer;
+} 
+
+.cfd-form-option label:before{
+  content: "";
+  position: absolute;
+  left: 0;
+  top: 50%;
+  transform: translateY(-50%);
+  width: 15px;
+  height: 15px;
+  border-radius: 50%;    
+  border: 3px solid #fff;  
+  box-shadow: 0px 0px 0px 2px #aaa;
+  transition: background-color 0.3s, box-shadow 0.3s;
+}
+
+.cfd-form-option input[type="radio"]:checked + label:before{
+  background-color: #1BA455;
+  box-shadow: 0px 0px 0px 2px #1BA455;
+}
+
+
+.cfd-form .cfd-form-fields .fs-location, .cfd-form .flight-nbr-field, .cfd-form .flight-fields-groupe{
+  display: flex;
+  width: 100%;
+  align-items: end;
+}
+
+.cfd-form .cfd-form-fields > div > span:first-child, .cfd-form .cfd-form-fields .passenger > div > span{
+  display: block;
+  margin-bottom: var(--cfd-field-top-space);
+}
+
+.cfd-form .cfd-form-fields .passenger div:not(.adults) > span{
+  text-align: center;
+  display: flex;
+  flex-flow: column wrap;
+  gap: 0px 5px;
+}
+
+.cfd-form .cfd-form-fields .passenger > div > span{
+  text-align: center;
+}
+
+.cfd-form .cfd-form-fields div input, 
+.cfd-form .cfd-form-fields div select,
+.cfd-form .cfd-form-fields button{
+  height: var(--cfd-field-height);
+  background-color: transparent;
+  border-radius: var(--cfd-field-primary-radius);
+  border: var(--cfd-field-border);
+}
+
+.cfd-form .cfd-form-fields input, 
+.cfd-form .cfd-form-fields select{
+  width: 100%;
+  padding: 0 13px;
+}
+
+
+.cfd-form .flight-nbr-field{
+  display: none;
+  padding: 0;
+}
+
+.cfd-form .flight-nbr-field div div{
+  width: 100%;
+  display: flex;
+}
+
+.cfd-form .cfd-form-fields .submitBtn{
+  width: max-content;
+}
+
+.cfd-form .cfd-form-fields .submitBtn button{
+  white-space: nowrap;
+  padding: 8px 40px;
+  text-transform: uppercase;
+  background-color: rgba(27, 164, 85, 1);
+  color: #fff;
+  border: 0;
+  font-weight: bold;
+  transition: 0.2s;
+}
+
+.cfd-form .cfd-form-fields .submitBtn button:hover{
+background-color: #ED7F3A;
+}
+
+/**********************************************/
+/**********************************************/
+
+.cfd-fscard-header{
+  box-sizing: border-box;
+  border-bottom: 1px solid #D8D8D8;
+  padding: 15px 40px;
+}
+
+.cfd-fscard-head, .cfd-fscard-body{
+  display: grid;
+  grid-template-columns: 1fr 5fr 1fr;
+  grid-template-rows: 100%;
+  gap: 0 40px; 
+  align-items: center;
+}
+
+.cfd-fscard-head{
+  height: 100%;
+}
+
+.cfd-fscard-body{
+  padding: 30px 40px 30px;
+}
+
+.cfd-fscard-col-1.fdeparr, .cfd-fscard-col-1.ctnr-fdeparr{
+  display: grid;
+  grid-template-columns: 1fr 2fr 1fr;
+  column-gap: 20px;
+  align-items: center;
+}
+
+/* .cfd-fscard-body .cfd-fscard-col-1{    
+  background-color: blue;
+} */
+
+.fnumber, .fdeparr,.fstatut{
+  font-style: normal;
+  font-weight: 500;
+  font-size: var(--font-size-normal);
+  color: #7B7B7B;
+}
+
+.fstatut, .fnumber, .ctnr-fstatut, .ctnr-fnumber{
+  text-align: center;
+}
+
+.ctnr-fnumber .airline{
+  font-style: normal;
+  font-weight: 650;
+  font-size: var(--font-size-normal);
+  /* identical to box height */
+  color: #EF8B4C;
+}
+
+.ctnr-fnumber .fnumber-detail{
+  margin-top: 10px;
+  padding: 8px 27px;
+  background: #FBEDE5;
+  display: inline-block;
+  font-style: normal;
+  font-weight: 650;
+  font-size: var(--font-size-normal);
+  color: #ED7F3A;
+}
+
+.ctnr-fdeparr .datetime{
+  font-style: normal;
+  font-weight: 500;
+  font-size: var(--font-size-large);
+  line-height: var(--font-size-large);
+}
+
+.ctnr-fdeparr .datetime .binding{
+  text-decoration: line-through solid;
+  color: red/*#EF8B4C*/; 
+}
+
+.ctnr-fdeparr .dep, .ctnr-fdeparr .arr{
+  display: grid;
+  grid-template-columns: 1fr;
+  row-gap: 15px;
+}
+
+.ctnr-fdeparr .country{
+font-style: normal;
+  font-weight: 700;
+  font-size: var(--font-size-normal);
+}
+
+.ctnr-fdeparr .airport{
+  font-style: normal;
+  font-weight: 400;
+  font-size: var(--font-size-normal);
+  color: #7B7B7B;
+  
+}
+
+.ctnr-fstatut button{
+  text-align: center;
+  padding: 12px 38px;
+  background: #D8FBE7 !important;
+  border: 1px solid #1BA455;
+  border-radius: var(--cfd-fs-radius);
+  font-style: normal;
+  font-weight: 650;
+  font-size: var(--font-size-normal);
+  color: #1BA455;
+}
+
+.ctnr-fstatut button:hover, .ctnr-fstatut button:focus {
+  background: #D8FBE7;
+  color: #1BA455;
+  cursor: auto;
+}
+
+/* timeline code*/
+.fstimeline {
+  position: relative;
+  display: grid;
+  grid-template-columns: 17px 1fr 17px;
+  align-items: center;
+  column-gap: 5px;
+}
+
+.start-point,
+.end-point {
+width: 17px;
+height: 17px;
+border-radius: 50%;
+background-color: #292929;
+}
+
+.progress-ctnr{
+position: relative;
+}
+
+.progress-ctnr .initline{
+border-bottom: 1px dashed #000000;
+}
+
+.fstimeline.scheduled .initline{
+  border-bottom: 2px dashed #000000;
+}
+
+.fsactive{
+position: absolute;
+top: calc(50% - 25px / 2);
+display: grid;
+grid-template-columns: 1fr auto;
+align-items: center;
+width: 25px;
+}
+
+.fsactive-progrss{
+background: var(--cfd-fs-prog-bgc);
+height: var(--cfd-fs-prog-size); 
+border-radius: var(--cfd-fs-prog-size);
+}
+
+.fsactive .airplane-icon{
+display: flex;
+}
+
+.fstimeline.scheduled .airplane-icon{
+  display: none;
+}
+
+.fsactive .airplane-icon i {
+font-size: var(--font-size-icone);
+transform: rotate(90deg);
+color: var(--cfd-fs-prog-bgc);
+}
+
+
+/*LOADER*/
+.fs-results-loading{ 
+  position: absolute;
+  width: 100%;
+  top: 0;
+  left: 0;
+}
+
+#cfd-overlay{	
+  position: absolute;
+  z-index: 100;
+  width: 100%;
+  height:208px;
+  background: rgba(155, 155, 155, 0.3);;
+}
+.cfd-cv-spinner {
+  height: 100%;
+  display: flex;
+  justify-content: center;
+  align-items: center;  
+}
+.cfd-spinner {
+  width: 40px;
+  height: 40px;
+  border: 4px #fff solid;
+  border-top: 4px #1ba455 solid;
+  border-radius: 50%;
+  animation: sp-anime 0.8s infinite linear;
+}
+@keyframes sp-anime {
+  100% { 
+    transform: rotate(360deg); 
+  }
+}
+.is-hide{
+  display:none;
+}
+
+
+/***select2***/
+
+/* .select2-container{
+  margin-top: var(--cfd-field-top-space);
+}*/
+
+.select2-selection.select2-selection--single {
+  height: var(--cfd-field-height);
+  border: var(--cfd-field-border);
+  border-radius: var(--cfd-field-primary-radius);
+}
+
+.select2-container--default.select2-container--open.select2-container--above .select2-selection--single,
+.select2-container--default.select2-container--open.select2-container--above .select2-selection--multiple,
+.select2-container--default.select2-container--open.select2-container--below .select2-selection--single, 
+.select2-container--default.select2-container--open.select2-container--below .select2-selection--multiple{
+  border: var(--cfd-field-border);
+  border-radius: var(--cfd-field-primary-radius);
+}
+
+.select2-container--default .select2-search--dropdown .select2-search__field {
+  outline: var(--cfd-field-outline);
+}
+
+.select2-selection.select2-selection--single > span:first-child {
+  height: var(--cfd-field-height);
+  line-height: var(--cfd-field-height);
+}
+.select2-selection.select2-selection--single > span:last-child {
+  height: var(--cfd-field-height);
+}
+
+.select2-container--default .select2-results__option--highlighted.select2-results__option--selectable {
+  background-color: var(--select2-option--highlighted-bgc);
+  color: var(--select2-option--highlighted-color);
+}
+
+.select2-container--default .select2-results__option--selected {
+  background-color: var(--select2-option-selected-bgc);
+}
+
+/* ***************************** */
+@media screen and (max-width: 900px) {
+  .cfd-fscard-ctnr.lg-screen{
+    display: none;
+  }
+  
+  .cfd-fscard-ctnr.sm-screen{
+    display: block;
+  }
+  
+  .cfd-form .cfd-form-fields {
+    flex-direction: column;
+		align-items: initial !important;;
+  }
+	.cfd-form .cfd-form-fields .passenger div,
+	.cfd-form .cfd-form-fields .passenger select,
+	.cfd-form .cfd-form-fields .submitBtn,
+	.cfd-form .cfd-form-fields .submitBtn button{
+		width: 100% !important;
+		border-radius: var(--cfd-field-primary-radius) !important;;
+  }
+
+  .cfd-form .cfd-form-fields .submitBtn{
+		margin-top: calc(var(--cfd-field-top-space) * 1.5) !important;
+  }
+	
+	.cfd-form .cfd-form-fields .passenger div{
+		align-items: initial !important;
+	}
+	
+	.cfd-form .cfd-form-fields .passenger span {
+    text-align: left !important;
+		align-items: start,
+  }
+	
+	.cfd-form .cfd-form-fields > div{
+		margin: 5px 0 !important;
+	}
+	
+	.cfd-form .cfd-form-fields > div > span:first-child, .cfd-form .cfd-form-fields .passenger > div > span{
+    display: block;
+    margin-bottom: calc(var(--cfd-field-top-space) / 2) !important;
+  }
+
+  .cfd-form .cfd-form-fields .passenger div:not(.adults) > span {
+    flex-flow: row wrap;
+  }
+	
+	.cfd-form .cfd-form-fields .passenger > div:first-child{
+		margin-left: 0;
+	}
+
+	.cfd-form .cfd-form-fields .passenger > div:last-child {
+		margin-right: 0;
+	}
+
+  .cfd-form  .cfd-form-option {
+    gap: 5px;
+  }
+
+  .cfd-form-option label{
+		position: relative;
+		cursor: pointer;
+		padding: 10px 30px;
+		border: 0;
+		box-shadow: 0 0 0 transparent;
+    gap: 5px;    
+		background: #F2F2F2;
+	}
+
+	.cfd-form-option label:before{
+		display: none !important;
+	}
+
+	.cfd-form-option input[type="radio"]:checked + label{
+		background-color: #1BA455;
+		color: #fff;
+	}
+
+  /********************************/
+  .cfd-fscard-col-1.fdeparr, .cfd-fscard-col-1.ctnr-fdeparr {
+    grid-template-columns: max-content auto max-content;
+  }
+  
+  .cfd-fscard-body{
+    gap: 0 20px 30px !important;
+  }
+  
+  .cfd-fscard-ctnr > div:nth-child(2){
+    grid-template-columns: 1fr;
+    grid-template-rows: 0;
+    gap: 20px;
+  }
+  
+  .cfd-fscard-ctnr > div:nth-child(3) {
+    border-top: 1px solid #D8D8D8;
+  }
+  
+  .cfd-fscard-ctnr > div:nth-child(4) {
+    grid-template-columns: 1fr 1fr;
+  }
+  
+  .cfd-fscard-head{
+    display: initial
+  }
+  
+  .ctnr-fnumber .airline{
+    display: block;
+  }
+  
+  .ctnr-fnumber, .cfd-fscard-col-1.fdeparr > div:first-child{
+    text-align: left
+  }
+  
+  .ctnr-fstatut, .cfd-fscard-col-1.fdeparr > div:last-child{
+    text-align: right
+  }
+  
+  .cfd-fscard-col-2.arr {
+    text-align: end;
+  }
+  
+  .ctnr-fstatut button {
+    padding: 10px 30px;
+  }
+  
+  .cfd-fscard-body {
+    padding: 30px 20px 30px;
+  }
+  
+  .cfd-fscard-header {
+    padding: 10px 20px;
+  }
+  
+  .fstimeline {
+    grid-template-columns: 10px auto 10px;
+  }
+  
+  .start-point, .end-point {
+    width: 10px;
+    height: 10px;
+  }
+  
+  .fsactive {
+    top: calc(50% - 20px / 2);
+    width: 20px;
+  }
+  
+  .fsactive svg {
+    width: 20px; 
+    height: 20px; 
+  }
+
+  
+  
+  
+
+}
+
+@media screen and (max-width: 769px) {
+  /* .cfd-form-option > div{
+		width: 100%;
+	} */
+  .cfd-form-option label{
+		/* width: 100%;
+    text-align: center; */
+    padding: 10px 20px;
+	}
+}

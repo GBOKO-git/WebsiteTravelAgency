@@ -1,0 +1,58 @@
+.elementor-7583 .elementor-element.elementor-element-b278b03{--display:flex;--flex-direction:column;--container-widget-width:100%;--container-widget-height:initial;--container-widget-flex-grow:0;--container-widget-align-self:initial;--background-transition:0.3s;}.elementor-7583 .elementor-element.elementor-element-7e655b5{--display:flex;--background-transition:0.3s;--border-radius:10px 10px 10px 10px;--padding-block-start:0px;--padding-block-end:40px;--padding-inline-start:0px;--padding-inline-end:0px;}.elementor-7583 .elementor-element.elementor-element-7e655b5:not(.elementor-motion-effects-element-type-background), .elementor-7583 .elementor-element.elementor-element-7e655b5 > .elementor-motion-effects-container > .elementor-motion-effects-layer{background-color:var( --e-global-color-8a2d527 );}.elementor-7583 .elementor-element.elementor-element-7e655b5, .elementor-7583 .elementor-element.elementor-element-7e655b5::before{--border-transition:0.3s;}.elementor-7583 .elementor-element.elementor-element-7ff57e8 img{width:100%;height:220px;object-fit:cover;object-position:center center;border-radius:10px 10px 10px 10px;}.elementor-7583 .elementor-element.elementor-element-5f29923 .elementor-heading-title{color:#000000;font-family:"Futura Std", Sans-serif;font-size:17px;font-weight:700;line-height:26px;}.elementor-7583 .elementor-element.elementor-element-5f29923 > .elementor-widget-container{padding:0px 30px 0px 30px;}.elementor-7583 .elementor-element.elementor-element-7a139bb .elementor-heading-title{color:var( --e-global-color-text );font-family:"Futura Std", Sans-serif;font-size:13px;font-weight:400;}.elementor-7583 .elementor-element.elementor-element-7a139bb > .elementor-widget-container{padding:0px 30px 0px 30px;}.elementor-7583 .elementor-element.elementor-element-c20b0e6 .elementor-button{background-color:var( --e-global-color-primary );border-radius:30px 30px 30px 30px;}.elementor-7583 .elementor-element.elementor-element-c20b0e6 .elementor-button:hover, .elementor-7583 .elementor-element.elementor-element-c20b0e6 .elementor-button:focus{color:#FFFFFF;background-color:var( --e-global-color-secondary );}.elementor-7583 .elementor-element.elementor-element-c20b0e6 .elementor-button:hover svg, .elementor-7583 .elementor-element.elementor-element-c20b0e6 .elementor-button:focus svg{fill:#FFFFFF;}.elementor-7583 .elementor-element.elementor-element-c20b0e6 > .elementor-widget-container{padding:0px 30px 0px 30px;}@media(max-width:1024px){.elementor-7583 .elementor-element.elementor-element-7e655b5{--padding-block-start:0px;--padding-block-end:20px;--padding-inline-start:0px;--padding-inline-end:0px;}}/* Start custom CSS for image, class: .elementor-element-7ff57e8 */.elementor-7583 .elementor-element.elementor-element-7ff57e8 a{
+    display: block;
+}/* End custom CSS */
+/* Start custom CSS for heading, class: .elementor-element-5f29923 */.elementor-7583 .elementor-element.elementor-element-5f29923 h2 {
+    height: 75px;
+}
+
+/*@media screen and (max-width: 900px){*/
+    .elementor-7583 .elementor-element.elementor-element-5f29923 h2 a{
+        display: -webkit-box;
+        -webkit-line-clamp: 3;
+        -webkit-box-orient: vertical;
+        overflow: hidden;
+    }
+/*}*/
+
+@media screen and (max-width: 360px) {
+.elementor-7583 .elementor-element.elementor-element-5f29923 h2 {
+    margin-bottom:10px;
+}
+}/* End custom CSS */
+/* Start Custom Fonts CSS */@font-face {
+	font-family: 'Futura Std';
+	font-style: normal;
+	font-weight: 400;
+	font-display: auto;
+	src: url('https://www.aircotedivoire.com/wp-content/uploads/2023/05/Futura-Std-Book.woff2') format('woff2'),
+		url('https://www.aircotedivoire.com/wp-content/uploads/2023/05/FuturaStdBook.woff') format('woff'),
+		url('https://www.aircotedivoire.com/wp-content/uploads/2023/05/Futura-Std-Book.ttf') format('truetype');
+}
+@font-face {
+	font-family: 'Futura Std';
+	font-style: normal;
+	font-weight: 700;
+	font-display: auto;
+	src: url('https://www.aircotedivoire.com/wp-content/uploads/2023/05/Futura-Std-Bold.woff2') format('woff2'),
+		url('https://www.aircotedivoire.com/wp-content/uploads/2023/05/FuturaStdBold.woff') format('woff'),
+		url('https://www.aircotedivoire.com/wp-content/uploads/2023/05/Futura-Std-Bold.ttf') format('truetype');
+}
+@font-face {
+	font-family: 'Futura Std';
+	font-style: normal;
+	font-weight: 900;
+	font-display: auto;
+	src: url('https://www.aircotedivoire.com/wp-content/uploads/2023/05/Futura-Std-Heavy.woff2') format('woff2'),
+		url('https://www.aircotedivoire.com/wp-content/uploads/2023/05/FuturaStdHeavy.woff') format('woff'),
+		url('https://www.aircotedivoire.com/wp-content/uploads/2023/05/Futura-Std-Heavy.ttf') format('truetype');
+}
+@font-face {
+	font-family: 'Futura Std';
+	font-style: normal;
+	font-weight: 500;
+	font-display: auto;
+	src: url('https://www.aircotedivoire.com/wp-content/uploads/2023/05/Futura-Std-Medium.woff2') format('woff2'),
+		url('https://www.aircotedivoire.com/wp-content/uploads/2023/05/FuturaStdMedium.woff') format('woff'),
+		url('https://www.aircotedivoire.com/wp-content/uploads/2023/05/Futura-Std-Medium.ttf') format('truetype');
+}
+/* End Custom Fonts CSS */

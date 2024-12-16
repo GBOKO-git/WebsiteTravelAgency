@@ -1,0 +1,46 @@
+jQuery(document).ready(function($){
+
+    $( "#departureDate" ).datepicker({ 
+        dateFormat: "dd-mm-yy",
+        minDate: 0,
+        showAnim: "slideDown",
+    });
+
+    $(document).on('change', '#departureDate', (e) => {
+        if (e.target.value !== '') {
+            var depValSplit = e.target.value.split('-');
+            var depDate = new Date(depValSplit[2], depValSplit[1] - 1, depValSplit[0]);
+
+            if ($('.cfd-form-option-one-ctnr').is(':visible')) {
+                if ($('#returnDate').prop('disabled')) { $('#returnDate').prop('disabled', false) }
+                if (!$('#returnDate').prop('required') ) { $('#returnDate').prop('required', true) } 
+            }
+            
+            
+            $( "#returnDate" ).datepicker({ 
+                dateFormat: "dd-mm-yy",
+                minDate: depDate,
+            });
+
+            if ($('#returnDate' ).val() !== '') {
+                var retValSplit = $('#returnDate' ).val().split('-');
+                var retDate = new Date(retValSplit[2], retValSplit[1] - 1, retValSplit[0]);
+                if (depDate > retDate) {
+                    $('#returnDate' ).val('');
+                }
+            }          
+        } else {
+            $('#returnDate').prop('disabled', true)
+            $('#returnDate').prop('required', true)
+        }
+    })
+
+    $(document).on('focus change ', '#returnDate', (e) => {
+        if ($('#departureDate' ).val() !== '') {
+            var depValSplit = $('#departureDate' ).val().split('-');
+            var depDate = new Date(depValSplit[2], depValSplit[1] - 1, depValSplit[0]);
+            $('#returnDate').datepicker("refresh", {minDate: depDate});
+        }    
+    })
+
+  });

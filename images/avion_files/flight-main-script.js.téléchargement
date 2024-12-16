@@ -1,0 +1,500 @@
+jQuery(document).ready(function($){
+
+    // function extractDateAndTime(dateTimeString) {
+    //     var date = dateTimeString.split("T")[0]; // Extrait la partie de la date
+    //     var time = dateTimeString.split("T")[1].split(":").slice(0, 2).join(":"); // Extrait la partie de l'heure
+    //     return { date: date, time: time };
+    // }
+    
+    $("select.cfd-select").select2({width: "100%"});
+
+    // function formatFrenchDate(dateString, dateFormat) {
+    //     moment.locale('fr');
+    //     var formattedDate = moment(dateString).format(dateFormat);
+    //     return formattedDate;
+    // }
+
+    // function alDataTimeExtraction(dateAndTime) {
+    //   if (dateAndTime) {
+    //     var date = dateAndTime.split(" ")[0]; // Première partie est la date
+    //     var time = dateAndTime.split(" ")[1]; // Deuxième partie est l'heure
+    //     return { date: date, time: time };
+    //   }
+    // }
+
+    function dateTimeExtration(lang, dateString, minplus= null) {
+      var fullDate = "";
+      var fullTime = "";
+      var lang = lang.toLowerCase();
+    
+      // Convertir la chaîne en objet Date
+      var dateTime = new Date(dateString);
+      
+      // Extraire la date au format 'Y-m-d'
+      var annee = dateTime.getFullYear();
+      var mois = dateTime.getMonth() + 1;
+      var jour = dateTime.getDate();  
+      var fullDate = annee + '-' + (mois < 10 ? '0' : '') + mois + '-' + (jour < 10 ? '0' : '') + jour;
+      
+      // Ajouter les minutes
+      minplus ? dateTime.setMinutes(dateTime.getMinutes() + minplus) : '';
+      
+      // Extraire les heures et les minutes
+      var heure = dateTime.getHours();
+      var minutes = dateTime.getMinutes();
+      
+      
+      if (lang === 'en') {
+        // Extraire l'heure au format 12 heures et déterminer AM/PM
+        var hour = (heure > 12) ? heure - 12 : heure;
+        var prefix = (heure >= 12) ? 'pm' : 'am';
+        fullTime = hour + ':' + (minutes < 10 ? '0' : '') + minutes + ' ' + prefix;
+        
+      } else {
+        fullTime = heure+ ':' + (minutes < 10 ? '0' : '') + minutes ;
+      }
+      
+    
+      // Retourner l'objet avec les propriétés date et time
+      return { date: fullDate, time: fullTime };
+    }
+    
+    
+    $(document).on('change', '#flight_status_request_form #flightNumber', (e) => {
+      var thisInput = $("#flight_status_request_form #flightNumber");
+      var thisInputToUpperCase = thisInput.val().toUpperCase();
+      
+      // Remove spaces from the string
+      var thisInputWithoutSpaces = thisInputToUpperCase.replace(/\s+/g, '');
+    
+      thisInput.val(thisInputWithoutSpaces);
+    });
+
+    $(function () {
+      var url = window.location.href; // Obtenir l'URL complète
+      var index = url.indexOf("?"); // Trouver la position du caractère '#'
+      var lienExtrait = index !== -1 ? url.slice(index + 1) : ""; // Extraire le lien à partir du '#' 
+      var linkData = lienExtrait.split('&')
+      var newData = {};
+      if (linkData.length > 1) {
+        $.each(linkData, (idx, data) => {
+          dataSplit = data.split('=')
+          newData[dataSplit[0]] = dataSplit[1];
+        })
+
+        if (newData.sfsBy && newData.sfsBy !== '' && $('#flight_status_request_form.fsform-cp')) {
+
+          var fsform = $('#flight_status_request_form.fsform-cp')
+          
+          if ($('#flight_status_request_form .cfd-form-option input[name="sfsBy"][value="' + newData.sfsBy.toUpperCase() +'"]').length > 0) {
+            $('#flight_status_request_form .cfd-form-option input[name="sfsBy"][value="' + newData.sfsBy.toUpperCase() +'"]').prop("checked", true);
+            CheckedActionOnLoading()
+          }
+
+          if (newData.sfsBy.toUpperCase() === "NBR") { // Search by flight number
+            
+            var fnumber = newData.fnumber.trim().replace(/\b\s+\b/g, '').toUpperCase()
+
+            if (fnumber && fnumber !== '' && $("#flight_status_request_form #flightNumber")) {
+                $("#flight_status_request_form #flightNumber").val(fnumber);
+                // Submit if fs number existe
+                $('#flight_status_request_form.fsform-cp').trigger('submit');                
+            }
+          } else if (newData.sfsBy.toUpperCase() === "LCT") { // Search by flight number location
+
+            var forigin = newData.forigin.trim().replace(/\b\s+\b/g, '').toUpperCase()
+            var fdestination = newData.fdestination.trim().replace(/\b\s+\b/g, '').toUpperCase()
+            var foriginElement = $("#flight_status_request_form #originLocationCode");
+            var fdestinationElement = $("#flight_status_request_form #destinationLocationCode");
+
+            if (forigin && fdestination && forigin !== '' && fdestination !== ''){
+
+                if (foriginElement && fdestinationElement && forigin !== fdestination
+                  && foriginElement.find('option[value="' + forigin + '"]').length > 0
+                  && fdestinationElement.find('option[value="' + fdestination + '"]').length > 0) 
+                {
+                  if (foriginElement.select2('destroy') && fdestinationElement.select2('destroy')) {
+                    foriginElement.val(forigin);
+                    fdestinationElement.val(fdestination);
+                    // 
+                    foriginElement.select2({width: "100%"})
+                    fdestinationElement.select2({width: "100%"})
+                  }
+                  
+
+                  // Submit if fs select option existe
+                  $('#flight_status_request_form.fsform-cp').trigger('submit'); 
+
+                } else if (forigin === fdestination) { 
+                  alert ('Le lieu de départ doit être différent de celui de la destination') 
+                } 
+            }
+          }
+          
+        }
+      } 
+    })
+
+    // Vérifier si la page a déjà été rechargée
+
+  //($(window).width() < 900 && !respPageReloaded) ? localStorage.setItem('respPageReloaded', 'true') : localStorage.setItem('respPageReloaded', 'false');
+  // var respPageReloaded = localStorage.getItem('respPageReloaded') === 'true';
+
+
+
+  //   function refreshPageIfNeeded() {
+  //     if ($(window).width() < 900 && !respPageReloaded) {
+  //       location.reload();      
+  //       localStorage.setItem('respPageReloaded', 'true');
+  //     } else if ($(window).width() > 900 && respPageReloaded){
+  //       location.reload();      
+  //       localStorage.setItem('respPageReloaded', 'false');
+  //     }
+  //   }
+
+  //   refreshPageIfNeeded();
+
+  //   $(window).on('resize', refreshPageIfNeeded);
+    
+    $(document).on('submit', '#flight_status_request_form.fsform-cp', flight_status)
+
+    /***********FLIGHT STATUS SUBMIT FUNCTION************* */
+    function flight_status(event, data = {}) {
+      event.preventDefault();
+
+      // $('#flight-offers-wapper').show();
+      $( ".fs-results" ).html('')
+      $( ".fs-results-loading" ).html(fsLoader());
+      $(".fs-results-loading").fadeIn(300);
+
+      $( document ).on( "ajaxStart", function(){ 
+        $(this).find('#flightSubmitBtn').prop('disabled', true);
+      })
+      $( document ).on( "ajaxStop", function(){ 
+        $(this).find('#flightSubmitBtn').prop('disabled', false);        
+        $( '.fs-results-loading' ).fadeOut(300)        
+        $( '.fs-results' ).fadeIn(500)
+      })
+
+      var isValid = true;
+      var data = {};
+      data.sfsBy = event.target.sfsBy.value.trim().toUpperCase();
+
+      if(data.sfsBy === "LCT"){   
+        // 
+        if ( event.target.forigin.value.trim() === "" || event.target.fdestination.value.trim() === "" ) {
+          alert("Veuillez Choisir votre lieu de départ de selui de la destination.");
+          isValid = false;
+        } else {
+          data.forigin = event.target.forigin.value.trim().replace(/\b\s+\b/g, '').toUpperCase();
+          data.fdestination = event.target.fdestination.value.trim().replace(/\b\s+\b/g, '').toUpperCase();
+        }
+
+      } else if(data.sfsBy === "NBR"){
+        // 
+        if (event.target.fnumber.value.trim() === "") {
+          alert("Veuillez saisir votre numéro du vol (Ex.: HF700");
+        } else {
+          data.fnumber = event.target.fnumber.value.trim().replace(/\b\s+\b/g, '').toUpperCase();
+        } 
+
+      } else {
+        alert("Veuillez saisir remplir les champs svp");
+        isValid = false;
+      }
+
+      if (isValid === true) {
+
+        // UPDATE URL
+        var newURL = window.location.pathname + '?' +  $.param(data)
+        history.pushState({}, "", newURL);
+
+        data.lang = window.location.href.indexOf("/en/") > -1 || $('html[lang="en-GB"]').length > 0 ? "EN" : ""
+        
+        $param = $.param(data) + "&action=get_flight_status";
+
+        // AJAX START
+        $.ajax({
+            url: ajax_object.ajax_url,
+            type: "post",
+            dataType: 'JSON',
+            data: $param,
+        })
+        .done(function( response ){
+          var content = "";
+          var fsProgressTimeline = {};
+          var cfdText = response.textTranslation;
+          console.log(response)
+
+          if (response.error) {
+            content += '<div class="apiError"><h4>'+response.error.code+'</h4><p>'+response.error.message+'</p></div>';
+          } else if (response.empty) {            
+            content += '<div class="empty">'+response.empty+'</div>'
+          } else {
+            $.each( response, function( idx, flightStatusData ) {
+
+              if (idx !== "textTranslation") {
+                var airlineName = 'Air Côte d’Ivoire';
+                var flightNber = flightStatusData.airline_iata+' '+flightStatusData.flight_number;
+                $fStatus = '';
+
+                
+                var depDateTime = dateTimeExtration(data.lang, flightStatusData.dep_time);
+                var depDelayed = flightStatusData.dep_delayed ? dateTimeExtration(data.lang, flightStatusData.dep_time, flightStatusData.dep_delayed) : null
+                //
+                var arrDateTime = dateTimeExtration(data.lang, flightStatusData.arr_time);
+                var arrDelayed = flightStatusData.arr_delayed ? dateTimeExtration(data.lang, flightStatusData.arr_time, flightStatusData.arr_delayed) : null
+
+                //
+                depTime = depDelayed ? depDelayed.time+' <small class="binding time">'+depDateTime.time+'</small>' : depDateTime.time;
+                arrTime = arrDelayed ? arrDelayed.time+' <small class="binding time">'+arrDateTime.time+'</small>' : arrDateTime.time;
+               
+                //
+                var depAirportCode = flightStatusData.dep_iata;
+                var arrAirportCode = flightStatusData.arr_iata;
+                //
+                var depCity = flightStatusData.airport.dep.city+' ('+depAirportCode+')';
+                var arrCity = flightStatusData.airport.arr.city+' ('+arrAirportCode+')';
+                //
+                var depAirportName = flightStatusData.airport.dep.name;                
+                var arrAirportName = flightStatusData.airport.arr.name;
+                
+                
+                if(flightStatusData.status === "scheduled"){ fStatus = data.lang === 'EN' ? flightStatusData.status : 'Prévu'; }
+                else if(flightStatusData.status === "cancelled"){ fStatus = data.lang === 'EN' ? flightStatusData.status : 'Annulé'; }
+                else if(flightStatusData.status === "active"){ fStatus = data.lang === 'EN' ? flightStatusData.status : 'En cours'; }
+                else if(flightStatusData.status === "landed"){ fStatus = data.lang === 'EN' ? flightStatusData.status : 'Atterri'; }
+                else { fStatus = flightStatusData.status }
+
+                // Obtenir l'heure actuelle
+                var heureActuelle = new Date();
+
+                // Convertir "12:40" en une heure JavaScript
+                var depHeure = depDateTime.time.split(':')
+                var arrHeure = arrDateTime.time.split(':')
+
+                var cterDepHeure = new Date();
+                var cterArrHeure = new Date();
+
+                cterDepHeure.setHours(depHeure[0]);
+                cterDepHeure.setMinutes(depHeure[1]);
+
+                cterArrHeure.setHours(arrHeure[0]);
+                cterArrHeure.setMinutes(arrHeure[1]);
+
+                // if (data.lang === "EN") {
+                //   if ( heureActuelle < cterDepHeure && heureActuelle < cterArrHeure) { fStatus = 'Scheduled'; }
+                //   if ( heureActuelle > cterDepHeure && heureActuelle < cterArrHeure) { fStatus = 'Active'; }
+                //   if ( heureActuelle > cterDepHeure && heureActuelle > cterArrHeure) { fStatus = 'Landed'; }
+                //   if(flightStatusData.status === "cancelled"){ fStatus = flightStatusData.status; }
+                // } else {
+                //   if ( heureActuelle < cterDepHeure && heureActuelle < cterArrHeure) { fStatus = 'Prévu'; }
+                //   if ( heureActuelle > cterDepHeure && heureActuelle < cterArrHeure) { fStatus = 'En cours'; }
+                //   if ( heureActuelle > cterDepHeure && heureActuelle > cterArrHeure) { fStatus = 'Atterri'; }
+                //   if(flightStatusData.status === "cancelled"){ fStatus = 'Annulé'; }
+                // }
+
+                
+
+                //' + ((flightStatusData.status === "scheduled") ? 'scheduled' : '') + '
+
+                /**
+                 * DESKTOP VIEW
+                 */
+                content += '<section class="cfd-fscard-ctnr lg-screen" data-flight="fs-'+idx+'"><div class="cfd-fscard-header"><div class="cfd-fscard-head">'
+                content += '<div class="cfd-fscard-col-1 fnumber">'+cfdText['Numéro de vol']+'</div><div class="cfd-fscard-col-1 fdeparr">'
+                content += '<div class="cfd-fscard-col-2">'+cfdText['Départ']+'</div><div class="cfd-fscard-col-2"></div>'
+                content += '<div class="cfd-fscard-col-2">'+cfdText['Arrivée']+'</div></div><div class="cfd-fscard-col-1 fstatut">'+cfdText['Statut']+'</div></div></div>'//    
+
+                content += '<div class="cfd-fscard-body"><div class="cfd-fscard-col-1 ctnr-fnumber"><span class="airline">'+airlineName+'</span><div class="fnumber-detail">'+flightNber+'</div></div>'//
+                content += '<div class="cfd-fscard-col-1 ctnr-fdeparr"><div class="cfd-fscard-col-2 dep"><div class="datetime">'+depTime+' <sup><small>(GMT)</small></sup></div><div class="country">'+depCity+'</div><div class="airport">'+depAirportName+'</div></div>'//
+
+                content += '<div class="cfd-fscard-col-2 fstimeline"><div class="start-point"></div><div class="progress-ctnr"><div class="initline"></div>'
+                content += '<div class="fsactive"><div class="fsactive-progrss"></div><div class="airplane-icon "><svg width="25" height="25" viewBox="0 0 23 23" fill="none" xmlns="http://www.w3.org/2000/svg"><g clip-path="url(#clip0_268_498)">'
+                content += '<path d="M6.1525 22.31H8.4525L13.6137 13.1089H19.55C19.55 13.1089 23 13.1089 23 11.5C23 9.89 19.55 9.89 19.55 9.89H13.6137L8.4525 0.690002H6.1525L9.0137 9.89H4.88865L2.3 7.58885H0L1.84115 11.4989L0 15.41H2.3L4.88865 13.1089H9.0137L6.1525 22.31Z" fill="#292929"/>'
+                content += '</g><defs><clipPath id="clip0_268_498"><rect width="23" height="23" fill="white"/></clipPath></defs></svg></div></div></div><div class="end-point"></div></div>'//
+
+                content += '<div class="cfd-fscard-col-2 arr"><div class="datetime">'+arrTime+' <sup><small>(GMT)</small></sup></div><div class="country">'+arrCity+'</div><div class="airport">'+arrAirportName+'</div></div>'//
+                content += '</div><div class="cfd-fscard-col-1 ctnr-fstatut"><button>'+fStatus+'</button></div></div></section>'//
+                //END  DESKTOP VIEW
+
+                /**
+                 * MOBILE VIEW
+                 */
+                content += '<section class="cfd-fscard-ctnr sm-screen" data-flight="fs-'+idx+'"><div class="cfd-fscard-header"><div class="cfd-fscard-head"><div class="cfd-fscard-col-1 fdeparr">';
+                content += '<div class="cfd-fscard-col-2">'+cfdText['Départ']+'</div><div class="cfd-fscard-col-2"></div><div class="cfd-fscard-col-2">'+cfdText['Arrivée']+'</div></div></div></div>';
+
+                content += '<div class="cfd-fscard-body"><div class="cfd-fscard-col-2 fstimeline"><div class="start-point"></div><div class="progress-ctnr"><div class="initline"></div><div class="fsactive">';
+                content += '<div class="fsactive-progrss"></div><div class="airplane-icon"><svg width="25" height="25" viewBox="0 0 23 23" fill="none" xmlns="http://www.w3.org/2000/svg"><g clip-path="url(#clip0_268_498)">';
+                content += '<path d="M6.1525 22.31H8.4525L13.6137 13.1089H19.55C19.55 13.1089 23 13.1089 23 11.5C23 9.89 19.55 9.89 19.55 9.89H13.6137L8.4525 0.690002H6.1525L9.0137 9.89H4.88865L2.3 7.58885H0L1.84115 11.4989L0 15.41H2.3L4.88865 13.1089H9.0137L6.1525 22.31Z" fill="#292929"/>';
+                content += '</g><defs><clipPath id="clip0_268_498"><rect width="23" height="23" fill="white" /> </clipPath> </defs> </svg></div></div></div><div class="end-point"></div></div>';
+
+                content += '<div class="cfd-fscard-col-1 ctnr-fdeparr"><div class="cfd-fscard-col-2 dep"><div class="datetime">'+depTime+' <sup><small>(GMT)</small></sup></div><div class="country">'+depCity+'</div>';
+                content += '<div class="airport">'+depAirportName+'</div></div><div class="cfd-fscard-col-2"></div><div class="cfd-fscard-col-2 arr"><div class="datetime">'+arrTime+' <sup><small>(GMT)</small></sup></div>';
+                content += '<div class="country">'+arrCity+'</div><div class="airport">'+arrAirportName+'</div></div></div></div>';
+
+                content += '<div class="cfd-fscard-header"><div class="cfd-fscard-head"><div class="cfd-fscard-col-1 fdeparr"><div class="cfd-fscard-col-2 fnumber">'+cfdText['Numéro de vol']+'</div>';
+                content += '<div class="cfd-fscard-col-2"></div><div class="cfd-fscard-col-2 fstatut">'+cfdText['Statut']+'</div></div></div></div>';
+
+                content += '<div class="cfd-fscard-body"><div class="cfd-fscard-col-1 ctnr-fnumber"><span class="airline">'+airlineName+'</span><div class="fnumber-detail">'+flightNber+'</div></div>';
+                content += '<div class="cfd-fscard-col-1 ctnr-fstatut"><button>'+fStatus+'</button></div></div></section>';
+                //END MOBILE VIEW
+                
+
+                //THIS PROGRESSBAR DATA
+                
+                fsProgressTimeline[idx] = {
+                  dataFsNumber  :  idx,
+                  depDatetime   :  flightStatusData.dep_time,
+                  arrDateTime   :  flightStatusData.arr_time
+                }
+              }
+
+            })
+          }
+
+          //INSERT FLIGHTS STATUS DATA
+          $( '.fs-results' ).html( content );
+
+          
+          if ($.isEmptyObject(fsProgressTimeline) === false ) {
+            var sectionIntervals = {};
+            $.each( fsProgressTimeline, function( idx, data ){
+              sectionIntervals[idx] = setInterval(function () {
+                if (updateProgressBar(data) === 'timeOut') { clearInterval(sectionIntervals[idx]); };
+                $(document).on('submit', '#flight_status_request_form', function(event) { clearInterval(sectionIntervals[idx]); })
+              }, 500);
+            })
+          }
+          
+        })
+        .fail(function( jqXHR, textStatus ) {
+          //$( ".fs-results" ).html(jqXHR.responseText);/*Erreur de requête*/
+          $( ".fs-results" ).html('<div class="apiError"><h4>Erreur de requête</h4</div>');
+          console.log(JSON.parsejqXHR);
+          debugger
+        })
+        // AJAX END
+
+      }
+    }
+
+    /***********FLIGHT STATUS PROGESSION BAR************* */
+    function updateProgressBar(data) {
+      var progressBar = $('section[data-flight="fs-'+data.dataFsNumber+'"] .fsactive');
+      var startDate = new Date(data.depDatetime);
+      var endDate = new Date(data.arrDateTime);
+      var totalTime = endDate - startDate;
+
+      var currentTime = new Date();
+      var elapsedTime = currentTime - startDate;
+      var progressPercentage = (elapsedTime / totalTime) * 100;
+
+      if(progressPercentage >= 100) { progressPercentage = 100 };
+
+      if(progressPercentage <= 0){ progressPercentage = 0 } 
+      else{ progressBar.css('column-gap', '5px') }
+
+      progressBar.css('width', progressPercentage + '%');
+
+      if (currentTime >= endDate) {
+          return 'timeOut'
+      }
+    }
+
+    /************************ */
+    function fsLoader() { return '<div id="cfd-overlay"><div class="cfd-cv-spinner"><span class="cfd-spinner"></span></div></div>'; }
+
+    /************************ */
+    // Détecter l'événement de changement d'état des boutons radio
+    $(document).on('change', '.flight_offers_request_form input[name="roundTrip"], input[name="sfsBy"]', (e)=>{
+      var parentFormClassName =  e.target.closest('form').className
+      var parentFormSelector = (parentFormClassName.indexOf(' ') !== -1) ? parentFormClassName.replace(/ /g, '.') : parentFormClassName;
+      var parentClass = e.target.closest('div').className
+
+      //Get parentClass end word
+      match = /cfd-form-option-(one|two)/.exec(parentClass)
+
+      if (match && match[1]) {
+        var termination = match[1];
+        if ($('.'+parentFormSelector).hasClass('flightStatusForm')) {
+          formCheckedAction(termination, '.flightStatusForm');
+        } else {
+          formCheckedAction(termination, '.'+ parentFormSelector);
+        }
+        
+      }
+    });
+
+    /************************ */
+    // Charge le contenu des boutons radio en fonction état de l'etat
+    CheckedActionOnLoading()
+
+    function CheckedActionOnLoading() {
+      // Fonction générique pour traiter le formulaire en fonction de l'option sélectionnée
+      function processForm(formSelector, option) {
+        if ($(formSelector + ' .cfd-form-option-' + option + ' input[type="radio"]').is(':checked')) {
+          formCheckedAction(option, formSelector);
+        }
+      }
+
+      // Liste des formulaires à traiter
+      var formsToProcess = ['.flight_offers_request_form', '.flightStatusForm'];
+      var optionsToProcess = ['one', 'two'];
+
+      // Itérer sur les formulaires et les options pour les traiter
+      formsToProcess.forEach(function(formSelector) {
+        optionsToProcess.forEach(function(option) { processForm(formSelector, option); });
+      });
+    }
+
+    function formCheckedAction(selectedOption = null, selector = null) {
+      //Flight Offert search
+        
+      var thisForm = $(selector);
+
+      if (selectedOption === 'one') {
+        var selectedOptionCtnr1 = thisForm.find('.cfd-form-option-one-ctnr');
+        var selectedOptionCtnr2 = thisForm.find('.cfd-form-option-two-ctnr');
+      } else if (selectedOption === 'two') {
+          var selectedOptionCtnr1 = thisForm.find('.cfd-form-option-two-ctnr');
+          var selectedOptionCtnr2 = thisForm.find('.cfd-form-option-one-ctnr');
+      }
+
+
+      if (selectedOptionCtnr1 && selectedOptionCtnr1.length > 0) {
+        selectedOptionCtnr1.show();
+        
+        if (selectedOptionCtnr1.find('input').length > 0) { 
+          if (selector === ".flightStatusForm") { selectedOptionCtnr1.find('input').prop('disabled', false); }
+          selectedOptionCtnr1.find('input').prop('required', true);
+        }
+    
+        if (selectedOptionCtnr1.find('select').length > 0) {   
+          if (selector === ".flightStatusForm") { selectedOptionCtnr1.find('select').prop('disabled', false); }
+          selectedOptionCtnr1.find('select').prop('required', true);
+        }
+      }
+      
+      if (selectedOptionCtnr2 && selectedOptionCtnr2.length > 0) {
+        selectedOptionCtnr2.hide();
+
+        if (selectedOptionCtnr2.find('input').length > 0) {
+          if (selector === ".flightStatusForm") { selectedOptionCtnr2.find('input').prop('disabled', true); }             
+          selectedOptionCtnr2.find('input').prop('required', false);
+          selectedOptionCtnr2.find('input').val('');
+        }
+    
+        if (selectedOptionCtnr2.find('select').length > 0) {
+          if (selector === ".flightStatusForm") { selectedOptionCtnr2.find('select').prop('disabled', true); }
+          selectedOptionCtnr2.find('select').prop('required', false); 
+        }
+
+      }
+    }
+
+    function fsHtml(params) {
+
+    }
+    
+});
